@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1400943599 source:e:\projects\memorystuff\memorystuff\source.cpp
+	"BasicStuff.hpp"
+	<iostream>
+
+1400943736 e:\projects\memorystuff\memorystuff\basicstuff.hpp
+	<type_traits>
+	<memory>
+	<functional>
+	<iostream>
+
