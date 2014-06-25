@@ -5,6 +5,8 @@
 ***************************/
 
 #include"BasicStuff.hpp"
+#include"AutoArgumentType.hpp"
+
 #include<iostream>
 
 struct you

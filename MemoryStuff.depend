@@ -1,11 +1,15 @@
 # depslib dependency file v1.0
-1400943599 source:e:\projects\memorystuff\memorystuff\source.cpp
+1403714702 source:e:\projects\memorystuff\memorystuff\source.cpp
 	"BasicStuff.hpp"
+	"AutoArgumentType.hpp"
 	<iostream>
 
-1400943736 e:\projects\memorystuff\memorystuff\basicstuff.hpp
+1403714876 e:\projects\memorystuff\memorystuff\basicstuff.hpp
 	<type_traits>
 	<memory>
 	<functional>
 	<iostream>
+
+1403714921 e:\projects\memorystuff\memorystuff\autoargumenttype.hpp
+	<type_traits>
 

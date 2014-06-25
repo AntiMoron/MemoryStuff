@@ -4,8 +4,8 @@
 //Date   : 2014-05-24
 ***************************/
 
-#ifndef __BASICSTUFF_h__
-#define __BASICSTUFF_h__
+#ifndef __BASICSTUFF_H__
+#define __BASICSTUFF_H__
 
 #include<type_traits>
 #include<memory>
