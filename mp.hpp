@@ -112,6 +112,12 @@ public:
 	* if there is one what about the efficiency.
 	*
 	*****/
+
+	/****@Conclusion
+	* After testing.
+	* we can draw a conclusion that :
+	* We Don't Need This Function At All.
+	****/
 		//if can't find the place : tighten the pool and recheck
 //		if(backwardDist[backwardDistCount-1].dist < size)
 //		{
