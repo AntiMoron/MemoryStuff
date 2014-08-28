@@ -116,6 +116,7 @@ public:
 //					if(backwardDist[j].dist == 0)
 //					{
 //						backwardDist[j].dist;
+//						blablablablabla
 //					}
 //				}
 //			}
@@ -229,7 +230,7 @@ private:
 		std::size_t position;
 	};
 
-	std::size_t 	chunkSize;
+	std::size_t 	chunkSize;		//reserved.
 	std::size_t 	poolSize;
 	std::size_t		backwardDistCount;
 	unit* 			backwardDist;
