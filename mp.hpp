@@ -131,7 +131,7 @@ public:
 			return ;
 		}
 		//find whether the ptr is in the array ok to delete.
-		std::size_t ptrIndex = -1;
+		LONG ptrIndex = -1;
 		for(int i = 0;i < backwardDistCount;i++)
 		{
 			if(backwardDist[i].position == position && backwardDist[i].dist == 0)
@@ -175,7 +175,7 @@ public:
 				}
 				//check whether it has following node.
 				//If the following node is not used.Then merge two nodes.
-				if(ptrIndex + 1 < backwardDistCount)
+				if(ptrIndex >= 0 && ptrIndex + 1 < backwardDistCount)
 				{
 					if(backwardDist[ptrIndex + 1].dist > 0)
 					{
@@ -205,7 +205,7 @@ public:
 					backwardDist[i].dist,
 					backwardDist[i].position);
 		}
-		printf("\r\n");
+		printf("Totally : %d\r\n\r\n",backwardDistCount);
 	}
 private:
 	void adaptChunkSize()

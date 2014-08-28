@@ -1,37 +1,27 @@
-/***************************
-//@love letter
-//Author : AntiMoron
-//Date   : 2014-05-24
-***************************/
+#include <windows.h>
+#include <iostream>
+#include "mp.hpp"
+using namespace std;
 
-#include"BasicStuff.hpp"
-#include"AutoArgumentType.hpp"
-#include"mp.hpp"
-#include<iostream>
-#include<stdio.h>
-
-struct you
+class CTestClass
 {
-	int l;
-	bool LoveMe;
-	char* troubles;
+    char m_chBuf[4096];
 };
 
 int main()
 {
+    DWORD count = GetTickCount();
 	MemoryPool mp;
-	you* p = (you*)mp.MPMalloc(sizeof(you));
-    int* p2 = (int*)mp.MPMalloc(sizeof(int));
-    short* p3 = (short*)mp.MPMalloc(sizeof(short));
-    you* p4 = (you*)mp.MPMalloc(sizeof(you));
-    mp.Display();
-    mp.MPFree<int>(p2);
-    mp.Display();
-    mp.MPFree<short>(p3);
-    mp.Display();
-	int* p5 = (int*)mp.MPMalloc(sizeof(int));
-    mp.Display();
-    mp.MPFree<you>(p4);
-    mp.Display();
-	return 0;
+    for(unsigned int i=0; i<0x5fffff; i++)
+    {
+//        CTestClass *p = new CTestClass;  2231ms
+//        delete p;
+//		CTestClass* p = (CTestClass*)mp.MPMalloc(sizeof(CTestClass)); 515 ms
+//		mp.MPFree<CTestClass>(p);
+    }
+
+    cout << "Interval = " << GetTickCount()-count << " ms" << endl;
+
+    return 0;
 }
+//2231ms
