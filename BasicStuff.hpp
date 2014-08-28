@@ -12,6 +12,24 @@
 #include<functional>
 #include<iostream>
 
+namespace MSF
+{
+	typedef signed char CHAR;
+	typedef unsigned char UCHAR;
+	typedef unsigned char BYTE;
+	typedef signed short SHORT;
+	typedef unsigned short USHORT;
+	typedef signed int INT;
+	typedef unsigned int UINT;
+	typedef signed long LONG;
+	typedef unsigned long ULONG;
+	typedef signed long long LL;
+	typedef unsigned long long ULL;
+	typedef float	FLOAT;
+	typedef double 	DOUBLE;
+	typedef long double LDOUBLE;
+}
+
 class ScopeGuard
 {
 public:
@@ -31,6 +49,7 @@ private:
 	const ScopeGuard& operator = (const ScopeGuard& other)
 	{
 		foo = other.foo;
+		return *this;
 	}
 	std::function<void()> foo;
 };
