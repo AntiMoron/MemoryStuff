@@ -21,7 +21,7 @@ public:
 	{
 		data = nullptr;
 		backwardDist = nullptr;
-		poolSize = 1024 * 1024;
+		poolSize = 100 * 1024;
 		data = new MSF::BYTE[poolSize];
 		//adapt chunk size
 		adaptChunkSize();
@@ -72,11 +72,11 @@ public:
 			backwardDist = nullptr;
 		}
 	}
-
-	void* MPMalloc(std::size_t size)
+	template<typename type,int count = 1>
+	type* MPAlloc()
 	{
 		//the result we need.
-		void* result = nullptr;
+		type* result = nullptr;
 		//check if the pool is full-filled.
 		if(backwardDistCount > poolSize)
 		{
@@ -86,7 +86,7 @@ public:
 		//and give the place.
 		for(int i=backwardDistCount-1;i >= 0;i--)
 		{
-			if(backwardDist[i].dist >= size)
+			if(backwardDist[i].dist >= sizeof(type) * count)
 			{
 				//make an insert operation
 				++backwardDistCount;
@@ -95,13 +95,23 @@ public:
 					backwardDist[j].dist = backwardDist[j-1].dist;
 					backwardDist[j].position = backwardDist[j-1].position;
 				}
-				backwardDist[i+1].dist = backwardDist[i].dist - size;
-				backwardDist[i+1].position = backwardDist[i].position + size;
+				backwardDist[i+1].dist = backwardDist[i].dist - (sizeof(type) * count);
+				backwardDist[i+1].position = backwardDist[i].position + (sizeof(type) * count);
 				backwardDist[i].dist = 0;
-				result = (void*)(data + backwardDist[i].position);
+				if(std::is_destructible<type>::value)
+				{
+					//
+				}
+
+				result = (type*)(data + backwardDist[i].position);
+				if(backwardDist[i].position == 24000)
+				{
+					printf("result : %x\r\n",result);
+				}
 				return result;
 			}
 		}
+
 	/***@Problem What about those pointers that already alloced from the pool ?**/
 
 	/***@Analysis
@@ -163,6 +173,8 @@ public:
 		}
 		if(ptrIndex == -1)
 		{
+			printf("%d %d\n",ptr,(BYTE*)ptr - data);
+			Display();
 			throw;
 			return ;
 		}
