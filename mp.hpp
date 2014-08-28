@@ -32,27 +32,32 @@ public:
 		backwardDist[0].position = 0;
 	}
 	//initialize a memory pool with specified size
-//	MemoryPool(std::size_t size)
-//	{
-//		data = nullptr;
-//		backwardDist = nullptr;
-//		poolSize = -1;
-//		if(size < 0)
-//		{
-//			throw std::bad_alloc();
-//		}
-//		data = new MSF::BYTE[size];
-//		if(data == nullptr)
-//		{
-//			throw std::bad_alloc();
-//		}
-//		else
-//		{
-//			poolSize = size;
-//		}
-//		//adapt chunk size
-//		adaptChunkSize();
-//	}
+	MemoryPool(std::size_t size)
+	{
+		data = nullptr;
+		backwardDist = nullptr;
+		poolSize = -1;
+		if(size < 0)
+		{
+			throw std::bad_alloc();
+		}
+		data = new MSF::BYTE[size];
+		if(data == nullptr)
+		{
+			throw std::bad_alloc();
+		}
+		else
+		{
+			poolSize = size;
+			//adapt chunk size
+			adaptChunkSize();
+			//initialize array that recort the distance of next used memory.
+			backwardDist = new unit[poolSize];
+			backwardDistCount = 1;
+			backwardDist[0].dist = poolSize;
+			backwardDist[0].position = 0;
+		}
+	}
 
 	~MemoryPool()
 	{
@@ -131,7 +136,7 @@ public:
 			return ;
 		}
 		//find whether the ptr is in the array ok to delete.
-		LONG ptrIndex = -1;
+		MSF::LONG ptrIndex = -1;
 		for(int i = 0;i < backwardDistCount;i++)
 		{
 			if(backwardDist[i].position == position && backwardDist[i].dist == 0)
