@@ -102,13 +102,13 @@ public:
 				return result;
 			}
 		}
-	/***@Problem What about those pointer that already alloced from the pool ?**/
+	/***@Problem What about those pointers that already alloced from the pool ?**/
 
 	/***@Analysis
 	* a pointer allocated from a memory pool should stay steady.
 	* so I can't move the allocated memory.
 	*
-	* or is there any way to make move allocated memory alright?
+	* or is there any way to make moving allocated memory alright?
 	* if there is one what about the efficiency.
 	*
 	*****/
