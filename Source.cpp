@@ -12,11 +12,11 @@ int main()
 {
     DWORD count = GetTickCount();
 	MemoryPool mp;
-    for(unsigned int i=0; i<0x5fffff; i++)
+    for(unsigned int i=0; i<0x0x5fffff; i++)
     {
-//        CTestClass *p = new CTestClass;  2231ms
+//        CTestClass *p = new CTestClass;  //2231ms
 //        delete p;
-//		CTestClass* p = (CTestClass*)mp.MPMalloc(sizeof(CTestClass)); 515 ms
+		CTestClass* p = (CTestClass*)mp.MPMalloc(sizeof(CTestClass)); //515 ms
 //		mp.MPFree<CTestClass>(p);
     }
 

@@ -103,6 +103,15 @@ public:
 			}
 		}
 	/***@Problem What about those pointer that already alloced from the pool ?**/
+
+	/***@Analysis
+	* a pointer allocated from a memory pool should stay steady.
+	* so I can't move the allocated memory.
+	*
+	* or is there any way to make move allocated memory alright?
+	* if there is one what about the efficiency.
+	*
+	*****/
 		//if can't find the place : tighten the pool and recheck
 //		if(backwardDist[backwardDistCount-1].dist < size)
 //		{
