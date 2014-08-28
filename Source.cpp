@@ -10,14 +10,14 @@ class CTestClass
 
 int main()
 {
-    DWORD count = GetTickCount();
 	MemoryPool mp;
-    for(unsigned int i=0; i<0x0x5fffff; i++)
+    DWORD count = GetTickCount();
+    for(unsigned int i=0; i<0x5fffff; i++)
     {
 //        CTestClass *p = new CTestClass;  //2231ms
 //        delete p;
 		CTestClass* p = (CTestClass*)mp.MPMalloc(sizeof(CTestClass)); //515 ms
-//		mp.MPFree<CTestClass>(p);
+		mp.MPFree<CTestClass>(p);
     }
 
     cout << "Interval = " << GetTickCount()-count << " ms" << endl;
