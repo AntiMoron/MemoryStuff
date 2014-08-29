@@ -13,11 +13,12 @@ using namespace std;
 
 HPEN hpen = CreatePen(PS_SOLID,2,RGB(0xff,0xff,0xff));
 HPEN bpen = CreatePen(PS_SOLID,2,RGB(0x0,0x0,0x0));
-HBRUSH wbrush = CreateSolidBrush(RGB(0xff,0xff,0xff));
-HBRUSH gbrush = CreateSolidBrush(RGB(0x0,0xcf,0x0));
 HBRUSH bbrush = CreateSolidBrush(RGB(0x0,0x0,0x0));
-HBRUSH rbrush = CreateSolidBrush(RGB(0xcf,0x0,0x0));
-HBRUSH ybrush = CreateSolidBrush(RGB(0xcf,0xcf,0x0));
+HBRUSH wbrush = CreateSolidBrush(RGB(0xff,0xff,0xff));
+HBRUSH w2brush = CreateSolidBrush(RGB(0xcc,0xcc,0xcc));
+HBRUSH w3brush = CreateSolidBrush(RGB(0xaa,0xaa,0xaa));
+HBRUSH w4brush = CreateSolidBrush(RGB(0x66,0x66,0x66));
+HBRUSH w5brush = CreateSolidBrush(RGB(0x33,0x33,0x33));
 
 MemoryPool mp;
 HWND hwnd;
@@ -26,6 +27,7 @@ RECT g_rect;
 HDC buffer;
 HDC g_bitmap;
 HBITMAP bmp;
+const int traceCount = 10;
 
 int ClearScreen(HDC _hdc)
 {
@@ -87,15 +89,36 @@ public:
 		dr = 0.1f + randomf(3.0f);
 		dx = sin(r / 3.1415926);
 		dy = -(0.3 + randomf(4.7f));
+		for(int i=0;i<3;i++)
+		{
+			histX[i] = x;
+			histY[i] = y;
+		}
 	}
 	void draw()
 	{
 		x += dx;
 		y += dy;
-		RECT rect = {x-1,y-1,x+1,y+1};
-		FillRect(buffer,&rect,WHITE_BRUSH);
+		for(int i=traceCount - 2;i>=0;i--)
+		{
+			histX[i+1] = histX[i];
+			histY[i+1] = histY[i];
+		}
+		histX[0] = x;
+		histY[0] = y;
     	r+=dr;
 		dx = (0.1f + randomf(10.0f)) * sin(r / 3.1415926);
+		for(int i=0;i<traceCount;i++)
+		{
+			RECT rect = {histX[i]-1.0f,histY[i]-1.0f,histX[i]+1.0f,histY[i]+1.0f};
+			if(i <= (traceCount/5))	FillRect(buffer,&rect,w2brush);
+			else if(i <= (2 * traceCount/5))	FillRect(buffer,&rect,w3brush);
+			else if(i <= (3 * traceCount/5))	FillRect(buffer,&rect,w4brush);
+			else if(i <= (4 * traceCount/5))	FillRect(buffer,&rect,w4brush);
+			else if(i <= traceCount)	FillRect(buffer,&rect,w5brush);
+		}
+		RECT rect = {x-1,y-1,x+1,y+1};
+		FillRect(buffer,&rect,WHITE_BRUSH);
 	}
 	bool isOver()
 	{
@@ -105,6 +128,7 @@ private:
 	float r,dr;
 	float x,y;
 	float dx,dy;
+	float histX[traceCount],histY[traceCount];
 };
 
 int main()
@@ -117,7 +141,7 @@ int main()
 	g_bitmap = CreateCompatibleDC(hdc);
 	bmp = CreateCompatibleBitmap(hdc,g_rect.right,g_rect.bottom);;
 	int pixCount = 0;
-	MSF::ULONG anim = 4000;
+	MSF::ULONG anim = 10000;
 	std::list<Pixel*>p;
 	while(anim--)
 	{
@@ -125,10 +149,13 @@ int main()
 
 		if(pixCount <= 1000)
 		{
-			Pixel* pt = mp.MPAlloc<Pixel>();
-			pixCount ++;
-			pt->init();
-			p.insert(p.end(),pt);
+			try{
+				Pixel* pt = mp.MPAlloc<Pixel>();
+				pixCount ++;
+				pt->init();
+				p.insert(p.end(),pt);
+			}
+			catch(const exception& e){}
 		}
 		for(std::list<Pixel*>::iterator it = p.begin() ;
 			it != p.end() ;

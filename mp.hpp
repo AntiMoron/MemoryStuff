@@ -21,7 +21,7 @@ public:
 	{
 		data = nullptr;
 		backwardDist = nullptr;
-		poolSize = 100 * 1024;
+		poolSize = 1024*1024;
 		data = new MSF::BYTE[poolSize];
 		//adapt chunk size
 		adaptChunkSize();
@@ -84,69 +84,37 @@ public:
 		}
 		//Search for the first place of avilable memory
 		//and give the place.
-		for(int i=backwardDistCount-1;i >= 0;i--)
+		for(int i=0;i < backwardDistCount;i++)
 		{
-			if(backwardDist[i].dist >= sizeof(type) * count)
+			if(backwardDist[i].dist >= (sizeof(type) * count))
 			{
-				//make an insert operation
-				++backwardDistCount;
-				for(int j=backwardDistCount-1;j>=i+1;j--)
+				//if the distance is larger than we need : make an insert operation
+				//otherwise just alloc the memory.
+				if(backwardDist[i].dist > (sizeof(type) * count))
 				{
-					backwardDist[j].dist = backwardDist[j-1].dist;
-					backwardDist[j].position = backwardDist[j-1].position;
+					++backwardDistCount;
+					for(int j=backwardDistCount - 1;j >= (i + 1);j--)
+					{
+						backwardDist[j].dist = backwardDist[j-1].dist;
+						backwardDist[j].position = backwardDist[j-1].position;
+					}
+					backwardDist[i+1].dist = backwardDist[i].dist - (sizeof(type) * count);
+					backwardDist[i+1].position = backwardDist[i].position + (sizeof(type) * count);
+					backwardDist[i].dist = 0;
+					if(std::is_destructible<type>::value)
+					{
+						//
+					}
 				}
-				backwardDist[i+1].dist = backwardDist[i].dist - (sizeof(type) * count);
-				backwardDist[i+1].position = backwardDist[i].position + (sizeof(type) * count);
-				backwardDist[i].dist = 0;
-				if(std::is_destructible<type>::value)
+				else
 				{
-					//
+					backwardDist[i].dist = 0;
 				}
-
 				result = (type*)(data + backwardDist[i].position);
-				if(backwardDist[i].position == 24000)
-				{
-					printf("result : %x\r\n",result);
-				}
 				return result;
 			}
 		}
-
-	/***@Problem What about those pointers that already alloced from the pool ?**/
-
-	/***@Analysis
-	* a pointer allocated from a memory pool should stay steady.
-	* so I can't move the allocated memory.
-	*
-	* or is there any way to make moving allocated memory alright?
-	* if there is one what about the efficiency.
-	*
-	*****/
-
-	/****@Conclusion
-	* After testing.
-	* we can draw a conclusion that :
-	* We Don't Need This Function At All.
-	****/
-		//if can't find the place : tighten the pool and recheck
-//		if(backwardDist[backwardDistCount-1].dist < size)
-//		{
-//			for(int i=0;i<backwardDistCount - 1;i++)
-//			{
-//				//if continuious memory need to move. then make it bat.
-//				std::size_t move_size = 0;
-//				std::size_t move_ptr = backwardDist[i + 1].position;
-//				for(int j = i ; j < backwardDistCount - 1; j++)
-//				{
-//					if(backwardDist[j].dist == 0)
-//					{
-//						backwardDist[j].dist;
-//						blablablablabla
-//					}
-//				}
-//			}
-//		}
-		//if still can't find return nullptr
+		//Failed return nullptr.
 		return nullptr;
 	}
 
@@ -158,7 +126,7 @@ public:
 		std::size_t position = (MSF::BYTE*)ptr - data;
 		if(position >= poolSize || (position < 0))
 		{
-			throw ;
+			throw std::exception();
 			return ;
 		}
 		//find whether the ptr is in the array ok to delete.
@@ -173,9 +141,7 @@ public:
 		}
 		if(ptrIndex == -1)
 		{
-			printf("%d %d\n",ptr,(BYTE*)ptr - data);
-			Display();
-			throw;
+			throw std::exception();
 			return ;
 		}
 		else
@@ -223,7 +189,7 @@ public:
 			}
 			else
 			{
-				throw ;
+				throw std::exception();
 				return ;
 			}
 		}
