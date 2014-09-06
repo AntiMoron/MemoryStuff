@@ -75,26 +75,11 @@ class Pixel
 public:
     Pixel()
     {
-
+		init();
     }
     ~Pixel()
     {
     }
-
-	void init()
-	{
-		x = 300;
-		y = 300;
-		r = random(360);
-		dr = 0.1f + randomf(3.0f);
-		dx = sin(r / 3.1415926);
-		dy = -(0.3 + randomf(4.7f));
-		for(int i=0;i<3;i++)
-		{
-			histX[i] = x;
-			histY[i] = y;
-		}
-	}
 	void draw()
 	{
 		x += dx;
@@ -129,6 +114,21 @@ private:
 	float x,y;
 	float dx,dy;
 	float histX[traceCount],histY[traceCount];
+
+	void init()
+	{
+		x = 300;
+		y = 300;
+		r = random(360);
+		dr = 0.1f + randomf(3.0f);
+		dx = sin(r / 3.1415926);
+		dy = -(0.3 + randomf(4.7f));
+		for(int i=0;i<3;i++)
+		{
+			histX[i] = x;
+			histY[i] = y;
+		}
+	}
 };
 
 int main()
@@ -152,7 +152,6 @@ int main()
 			try{
 				Pixel* pt = mp.MPAlloc<Pixel>();
 				pixCount ++;
-				pt->init();
 				p.insert(p.end(),pt);
 			}
 			catch(const exception& e){}
