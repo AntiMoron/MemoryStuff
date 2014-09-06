@@ -101,17 +101,16 @@ public:
 					backwardDist[i+1].dist = backwardDist[i].dist - (sizeof(type) * count);
 					backwardDist[i+1].position = backwardDist[i].position + (sizeof(type) * count);
 					backwardDist[i].dist = 0;
+					if(std::is_destructible<type>::value)
+					{
+						//
+					}
 				}
 				else
 				{
 					backwardDist[i].dist = 0;
 				}
 				result = (type*)(data + backwardDist[i].position);
-				if(std::is_constructible<type>::value)
-				{
-					new(result) type;
-				}
-
 				return result;
 			}
 		}
